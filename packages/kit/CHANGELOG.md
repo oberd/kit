@@ -1,5 +1,11 @@
 # @sveltejs/kit
 
+## 1.0.0-next.124
+
+### Patch Changes
+
+- 872840a: Pass along custom properties added to Error
+
 ## 1.0.0-next.123
 
 ### Patch Changes
