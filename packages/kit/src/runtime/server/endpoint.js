@@ -9,6 +9,16 @@ function error(body) {
 	};
 }
 
+/** @param {string} type */
+function is_binary_type(type) {
+	return (
+		type.startsWith('application') ||
+		type.startsWith('image') ||
+		type.startsWith('video') ||
+		type.startsWith('audio')
+	);
+}
+
 /**
  * @param {import('types/hooks').ServerRequest} request
  * @param {import('types/internal').SSREndpoint} route
@@ -39,13 +49,13 @@ export default async function render_route(request, route) {
 			const type = headers['content-type'];
 
 			// validation
-			if (type === 'application/octet-stream' && !(body instanceof Uint8Array)) {
+			if (is_binary_type(type) && !(body instanceof Uint8Array)) {
 				return error(
 					`Invalid response from route ${request.path}: body must be an instance of Uint8Array if content type is application/octet-stream`
 				);
 			}
 
-			if (body instanceof Uint8Array && type !== 'application/octet-stream') {
+			if (body instanceof Uint8Array && !is_binary_type(type)) {
 				return error(
 					`Invalid response from route ${request.path}: Uint8Array body must be accompanied by content-type: application/octet-stream header`
 				);
